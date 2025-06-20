@@ -8,7 +8,7 @@ export default async function Home() {
   return (
     <Theme>
       <Heading as="h1" size="8" mb="5">
-        Welcome to Next Write!
+        Welcome to NextWrite!
       </Heading>
       <div style={{ display: "grid", gap: "1.5rem" }}>
         {posts.map((post: any) => (
