@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -39,4 +43,61 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+
+/* Prose styling for markdown content */
+.prose {
+  color: var(--gray-12);
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.75rem;
+}
+
+.prose p {
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+.prose ul,
+.prose ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+}
+
+.prose code {
+  background: var(--gray-3);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+}
+
+.prose pre {
+  background: var(--gray-2);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose a {
+  color: var(--accent-11);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: var(--accent-12);
 }

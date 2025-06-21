@@ -1,28 +1,42 @@
 import "@radix-ui/themes/styles.css";
-import { Theme, Card, Heading, Text, Link } from "@radix-ui/themes";
+import { Box, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { getSortedPosts } from "@/lib/posts";
+import Link from "next/link";
 
 export default async function Home() {
   const posts = await getSortedPosts();
 
   return (
-    <Theme>
-      <Heading as="h1" size="8" mb="5">
-        Welcome to NextWrite!
+
+    <Box p="5" mx="auto" maxWidth="800px">
+      <Heading as="h1" size="8" mb="6" align="center">
+        Next Write
       </Heading>
-      <div style={{ display: "grid", gap: "1.5rem" }}>
-        {posts.map((post: any) => (
-          <Card key={post.slug} variant="classic">
-            <Link href={`/blog/${post.slug}`}>
-              <Heading as="h2" size="5" mb="2">
-                {post.title}
-              </Heading>
-            </Link>
-            <Text as="p" mb="1">{post.description}</Text>
-            <Text as="p" color="gray">{post.date}</Text>
-          </Card>
+
+      <Text as="p" size="4" mb="8" align="center" color="gray">
+        Thoughts, ideas, and stories from the Next.js community
+      </Text>
+
+      <Grid columns={{ initial: '1', md: '3', sm: '2' }} gap="6">
+        {posts.map((post) => (
+          <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+            <Card variant="classic" size="3">
+              <Flex direction="column" gap="3">
+                <Heading as="h2" size="5" mb="2">
+                  {post.title}
+                </Heading>
+                <Text size="3" color="gray">
+                  {post.description}
+                </Text>
+                <Text size="2" color="gray">
+                  Published on: {new Date(post.date).toLocaleDateString()}
+                </Text>
+              </Flex>
+            </Card>
+          </Link>
         ))}
-      </div>
-    </Theme>
+      </Grid>
+    </Box>
+
   );
 }
