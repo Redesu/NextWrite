@@ -1,7 +1,7 @@
 ---
-title: "Second Blog Post"
-date: "2025-06-20"
-description: "This is the second post of the website using Next.js and Markdown"
+title: "Third Blog Post"
+date: "2025-06-24"
+description: "This is the third post of the website using Next.js and Markdown"
 ---
 
 # Welcome to My Blog

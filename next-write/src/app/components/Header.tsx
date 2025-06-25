@@ -3,23 +3,23 @@ import NextLink from "next/link";
 
 export function Header() {
     return (
-        <Box asChild py="4" px="5" style={{ borderBottom: "1px solid var(--gray-5" }}>
+        <Box asChild py="4" px="5" style={{ borderBottom: "1px solid var(--gray-5)" }}>
             <header>
-                <Flex justify="between" align="center">
-                    <NextLink href="/">
-                        <Link asChild>
+                <Flex justify="center" align="center" gap="6" maxWidth="1200px" mx="auto">
+                    <Link asChild>
+                        <NextLink href="/">
                             <Heading as="h1" size="4" weight="bold">
                                 Next Write
                             </Heading>
-                        </Link>
-                    </NextLink>
+                        </NextLink>
+                    </Link>
                     <Flex gap="4">
-                        <NextLink href="/">
-                            <Link asChild>Home</Link>
-                        </NextLink>
-                        <NextLink href="/about">
-                            <Link asChild>About</Link>
-                        </NextLink>
+                        <Link asChild>
+                            <NextLink href="/">Home</NextLink>
+                        </Link>
+                        <Link asChild>
+                            <NextLink href="/about">About</NextLink>
+                        </Link>
                     </Flex>
                 </Flex>
             </header>

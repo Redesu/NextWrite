@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import "@radix-ui/themes/styles.css";
 import "./globals.css";
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import { Inter } from "next/font/google";
@@ -21,8 +21,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Theme appearance="light" accentColor="violet" radius="large">
+      <body className="vsc-initialized">
+        <Theme appearance="dark" accentColor="teal" radius="large" scaling="110%">
           <Header />
           {children}
           <ThemePanel />
