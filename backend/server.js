@@ -1,9 +1,15 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/auth.js';
+import authRoutes from './src/routes/auth.routes.js';
 import 'dotenv/config';
+import { ratelimit } from 'express-rate-limit';
 
 const app = express();
+const limiter = ratelimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+});
+app.use(limiter);
 
 app.use(cors({
     origin: "http://localhost:3000",
