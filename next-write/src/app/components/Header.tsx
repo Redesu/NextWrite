@@ -20,6 +20,12 @@ export function Header() {
                         <Link asChild>
                             <NextLink href="/about">About</NextLink>
                         </Link>
+                        <Link asChild>
+                            <NextLink href="/login">Login</NextLink>
+                        </Link>
+                        <Link asChild>
+                            <NextLink href="/register">Register</NextLink>
+                        </Link>
                     </Flex>
                 </Flex>
             </header>

@@ -32,7 +32,6 @@ export const storeRefreshToken = async (userId, token) => {
 export const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
-
         //checking if the user exist
         const userExists = await db.query(
             'SELECT * FROM users where email = $1 OR username = $2',
@@ -49,7 +48,7 @@ export const register = async (req, res) => {
 
         //creating the user
         const newUser = await db.query(
-            'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
+            'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *',
             [username, email, hashedPassword]
         );
 
@@ -73,7 +72,7 @@ export const register = async (req, res) => {
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-
+        console.log("User created successfully");
         res.status(201).json({
             id: newUser.rows[0].id,
             username: newUser.rows[0].username,
@@ -86,6 +85,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
+        console.log(req.body);
         const { email, password } = req.body;
         const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
@@ -119,6 +119,12 @@ export const login = async (req, res) => {
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        res.status(200).json({
+            id: user.rows[0].id,
+            username: user.rows[0].username,
+            email: user.rows[0].email,
+            message: 'Login successful!'
         });
 
     } catch (error) {

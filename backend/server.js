@@ -10,7 +10,7 @@ import authRoutes from './src/routes/auth.routes.js';
 const app = express();
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 10,
+    max: 1000,
 });
 app.use(limiter);
 
