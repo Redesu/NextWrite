@@ -4,12 +4,14 @@ import { Form } from "radix-ui";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 
 export default function LoginPage() {
 
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const router = useRouter();
 
@@ -17,12 +19,20 @@ export default function LoginPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const { success, message } = await login(formData);
-        if (!success) {
-            setError(message);
-        } else {
-            alert('Login successful!');
+        if (loading) return; // this is to prevent multiple submissions
+        setLoading(true);
+        setError('');
+
+        try {
+            const formData = new FormData(event.currentTarget);
+            const { success, message } = await login(formData);
+            if (!success) {
+                setError(message);
+            }
+        } catch (err) {
+            setError(err as string || 'An unexpected error occurred. Please try again later.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -89,20 +99,48 @@ export default function LoginPage() {
                     </Form.Message>
                 </div>
             </Form.Field>
+            <Form.Field name="rememberMe">
+                <div style={{
+                    display: 'flex', alignItems: 'center', gap:
+                        8
+                }}>
+                    <Form.Control asChild>
+                        <input
+                            type="checkbox"
+                            name="rememberMe"
+                            style={{
+                                width: '16px',
+                                height: '16px',
+                                cursor: 'pointer',
+                            }}
+                        />
+                    </Form.Control>
+                    <Form.Label style={{ fontWeight: 500, color: '#101211' }}>Remember me</Form.Label>
+                </div>
+            </Form.Field>
+            <Form.Field name="register">
+                <div style={{ width: "100%", textAlign: "center", marginTop: 8 }}>
+                    <p style={{ color: "#6366f1", fontWeight: 500, fontSize: "14px", }}> Don't have an account?</p>
+                    <Link href="/register" style={{ color: "#6366f1", fontWeight: 500, fontSize: "14px", cursor: "pointer" }}>
+                        <b>Register here</b>
+                    </Link>
+                </div>
+            </Form.Field>
             <Form.Submit asChild>
                 <button type="submit"
+                    disabled={loading}
                     style={{
                         width: '100%',
                         padding: '10px 0',
                         borderRadius: '6px',
                         border: 'none',
-                        background: '#6366f1',
+                        background: loading ? '#a5b4fc' : '#6366f1',
                         color: 'white',
                         fontWeight: 600,
                         fontSize: '16px',
-                        cursor: 'pointer',
+                        cursor: loading ? 'not-allowed' : 'pointer',
                         marginTop: '12px',
-                    }}>Login</button>
+                    }}>{loading ? 'Logging in...' : 'Login'}</button>
             </Form.Submit>
         </Form.Root>
     );

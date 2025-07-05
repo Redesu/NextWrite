@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="vsc-initialized">
-        <Theme appearance="dark" accentColor="teal" radius="large" scaling="110%">
+        <Theme appearance="light" accentColor="sky" radius="large" scaling="110%">
           <AuthProvider>
             <Header />
             {children}
