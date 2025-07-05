@@ -59,7 +59,7 @@ export const register = async (req, res) => {
         await storeRefreshToken(newUser.rows[0].id, refreshToken);
 
         //set the cookies
-        res.cookie('acessToken', accessToken, {
+        res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
@@ -107,7 +107,7 @@ export const login = async (req, res) => {
         await storeRefreshToken(user.rows[0].id, refreshToken);
 
         //set the cookies
-        res.cookie('acessToken', accessToken, {
+        res.cookie('accessToken', accessToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

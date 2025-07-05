@@ -29,7 +29,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 });
                 setUser(res.data)
             } catch (err) {
-                setUser(null);
+                const refresh = await refreshToken();
+                if (!refresh) {
+                    setUser(null);
+                }
             } finally {
                 setLoading(false);
             }
@@ -44,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, data, {
                 withCredentials: true
             });
+            console.log("Setting user as ", res.data);
             setUser(res.data);
             router.push('/');
             return { success: true };
@@ -59,6 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 withCredentials: true
             });
             console.log(res.data);
+            setUser(res.data);
             router.push('/');
             return { success: true };
         } catch (err) {
@@ -68,11 +73,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = async () => {
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {}, {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {}, {
                 withCredentials: true
             });
             setUser(null);
-            Cookies.remove('acessToken');
+            Cookies.remove('accessToken');
             Cookies.remove('refreshToken');
             router.push('/login');
         } catch (err) {
@@ -82,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const refreshToken = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh-token`, {
                 withCredentials: true
             });
             setUser(res.data);
@@ -97,7 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const requestInterceptor = axios.interceptors.request.use(
             (config) => {
                 if (!config.headers['Authorization']) {
-                    const accessToken = Cookies.get('acessToken');
+                    const accessToken = Cookies.get('accessToken');
                     if (accessToken) {
                         config.headers['Authorization'] = `Bearer ${accessToken}`;
                     }
@@ -114,6 +119,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             axios.interceptors.response.eject(requestInterceptor);
         };
     }, []);
+
 
     return (
         <AuthContext.Provider value={{

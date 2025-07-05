@@ -12,6 +12,7 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordMismatch, setPasswordMismatch] = useState(false);
 
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -20,14 +21,13 @@ export default function RegisterPage() {
         setLoading(true);
         setError('');
 
-
         const formData = new FormData(event.currentTarget);
         const password = formData.get('password') as string;
         const confirmPassword = formData.get('confirmPassword') as string;
 
         if (password !== confirmPassword) {
             setLoading(false);
-            setError('Passwords do not match.');
+            setPasswordMismatch(true);
             setPassword('');
             setConfirmPassword('');
             return;
@@ -156,6 +156,11 @@ export default function RegisterPage() {
                     <Form.Message match="valueMissing" style={{ color: "crimson", fontSize: 13 }}>
                         Please confirm your password
                     </Form.Message>
+                    {passwordMismatch && (
+                        <Form.Message style={{ color: "crimson", fontSize: 13 }}>
+                            Passwords do not match
+                        </Form.Message>
+                    )}
                 </div>
             </Form.Field>
             <Form.Field name="login">

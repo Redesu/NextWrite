@@ -2,9 +2,29 @@
 import { Box, Button, Flex, Heading, Link } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import { Spinner } from "@radix-ui/themes";
+import { useEffect } from "react";
 
 export function Header() {
-    const { user, logout } = useAuth();
+    const { user, logout, loading } = useAuth();
+
+    useEffect(() => {
+        console.log("Header rendered", user);
+    }, [user]);
+
+    if (loading) {
+        return (
+            <Box asChild py="4" px="5" style={{ borderBottom: "1px solid var(--gray-5)" }}>
+                <Flex justify="between" align="center" gap="6" maxWidth="1200px" mx="auto">
+                    <Heading as="h1" size="4" weight="bold">
+                        Next Write
+                    </Heading>
+                    <Spinner />
+                </Flex>
+            </Box>
+        )
+    }
+
     return (
         <Box asChild py="4" px="5" style={{ borderBottom: "1px solid var(--gray-5)" }}>
             <header>
