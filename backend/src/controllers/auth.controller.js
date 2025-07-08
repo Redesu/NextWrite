@@ -38,7 +38,7 @@ export const register = async (req, res) => {
             [email, username]
         );
 
-        if (userExists.rows.lenght > 0) {
+        if (userExists.rows.length > 0) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
@@ -79,7 +79,8 @@ export const register = async (req, res) => {
             email: newUser.rows[0].email,
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error creating user:", error);
+        res.status(500).json({ message: "Something went wrong while registering" });
     }
 }
 
@@ -128,7 +129,8 @@ export const login = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Error logging in:", error);
+        res.status(500).json({ message: "Something went wrong while logging in" });
     }
 };
 
@@ -146,7 +148,8 @@ export const logout = async (req, res) => {
         res.clearCookie('refreshToken');
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error logging out:', error);
+        res.status(500).json({ message: 'Something went wrong while logging out' });
     }
 }
 
@@ -164,11 +167,11 @@ export const refreshToken = async (req, res) => {
         // checking if the refresh token already exists in the database
         const tokenDb = await db.query('SELECT * FROM refresh_tokens WHERE token = $1 AND user_id = $2', [refreshToken, decoded.id]);
 
-        if (tokenDb.rows.lenght === 0) {
+        if (tokenDb.rows.length === 0) {
             return res.status(401).json({ message: 'Invalid refresh token' });
         }
 
-        //checking if the token is expired
+        // checking if the token is expired
         if (new Date(tokenDb.rows[0].expires_at) < new Date()) {
             await db.query('DELETE FROM refresh_tokens WHERE token = $1', [refreshToken]);
             return res.status(401).json({ message: 'Refresh token expired' });
@@ -191,7 +194,11 @@ export const refreshToken = async (req, res) => {
 
         res.status(200).json({ message: 'Token refreshed successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error instanceof jwt.JsonWebTokenError || error instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({ message: 'Invalid or expired refresh token' });
+        }
+        console.error('Error refreshing token:', error);
+        res.status(500).json({ message: "Something went wrong while refreshing the token" });
     }
 }
 
@@ -205,6 +212,7 @@ export const getMe = async (req, res) => {
         }
         res.status(200).json(user.rows[0]);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ message: 'Something went wrong while fetching user data' });
     }
 }

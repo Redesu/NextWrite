@@ -14,7 +14,7 @@ export function getSortedPosts() {
 
         return {
             slug,
-            ...(data as { title: string; date: string; description: string }),
+            ...(data as { title: string; date: string; description: string, createdBy: string }),
             content,
         }
     });
@@ -29,7 +29,7 @@ export function getPostBySlug(slug: string) {
 
     return {
         slug,
-        ...(data as { title: string; date: string; description: string }),
+        ...(data as { title: string; date: string; description: string; createdBy: string }),
         content,
     };
 }

@@ -5,10 +5,12 @@ import { Form } from "radix-ui";
 import { useState } from "react";
 import { createPost } from "./actions";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function createPostPage() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
     const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,9 +23,10 @@ export default function createPostPage() {
         const title = formData.get('title') as string;
         const description = formData.get('description') as string;
         const content = formData.get('content') as string;
+        const createdBy = user?.username || user?._id || 'anonymous';
 
         try {
-            const result = await createPost({ title, description, content });
+            const result = await createPost({ title, description, content, createdBy });
             if (result.success) {
                 router.push(`/blog/${result.slug}`);
             } else {

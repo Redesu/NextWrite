@@ -5,10 +5,12 @@ import path from 'path';
 export async function createPost({
     title,
     description,
+    createdBy,
     content
 }: {
     title: string;
     description: string;
+    createdBy: string;
     content: string;
 }) {
     const date = new Date().toISOString().split('T')[0];
@@ -18,6 +20,7 @@ export async function createPost({
 title: "${title}"
 date: "${date}"
 description: "${description}"
+createdBy: "${createdBy}"
 ---
     
 ${content}

@@ -17,11 +17,11 @@ export default async function Home() {
         Thoughts, ideas, and stories from the Next.js community
       </Text>
 
-      <Grid columns={{ initial: '1', md: '3', sm: '2' }} gap="6">
+      <Grid columns={{ initial: '1', md: '3', sm: '2' }} gap="6" align="stretch">
         {posts.map((post) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-            <Card variant="classic" size="3">
-              <Flex direction="column" gap="3">
+            <Card variant="classic" size="3" style={{ height: '100%' }}>
+              <Flex direction="column" gap="3" style={{ height: '100%' }}>
                 <Heading as="h2" size="5" mb="2">
                   {post.title}
                 </Heading>
