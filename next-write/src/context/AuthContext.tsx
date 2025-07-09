@@ -47,7 +47,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`, data, {
                 withCredentials: true
             });
-            console.log("Setting user as ", res.data);
             setUser(res.data);
             router.push('/');
             return { success: true };
@@ -62,7 +61,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, data, {
                 withCredentials: true
             });
-            console.log(res.data);
             setUser(res.data);
             router.push('/');
             return { success: true };
@@ -87,12 +85,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const refreshToken = async () => {
         try {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh-token`, {
-                withCredentials: true
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh-token`, {}, {
+                withCredentials: true,
+
             });
             setUser(res.data);
             return true;
         } catch (err) {
+            console.error("Failed to refresh token:", (err as Error).message);
             return false;
         }
     };

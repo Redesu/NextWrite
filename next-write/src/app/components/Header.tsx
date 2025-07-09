@@ -9,7 +9,6 @@ export function Header() {
     const { user, logout, loading } = useAuth();
 
     useEffect(() => {
-        console.log("Header rendered", user);
     }, [user]);
 
     if (loading) {

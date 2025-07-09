@@ -72,7 +72,7 @@ export const register = async (req, res) => {
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        console.log("User created successfully");
+
         res.status(201).json({
             id: newUser.rows[0].id,
             username: newUser.rows[0].username,
@@ -86,7 +86,6 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        console.log(req.body);
         const { email, password } = req.body;
         const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 

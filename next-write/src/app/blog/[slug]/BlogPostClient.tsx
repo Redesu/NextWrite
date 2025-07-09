@@ -4,7 +4,6 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function BlogPostClient({ post }: { post: any }) {
     const { user } = useAuth();
-    console.log("User:", user?.username, "Post Created By:", post.createdBy);
 
     return (
         <Flex justify="center" align="center" direction="column" minHeight="100vh">
