@@ -4,7 +4,7 @@ import matter from "gray-matter";
 
 const postsDirectory = path.join(process.cwd(), "src/app/posts");
 
-export function getSortedPosts() {
+export function getSortedPosts(offset = 0, limit = 10) {
     const fileNames = fs.readdirSync(postsDirectory);
     const allPosts = fileNames.map((fileName) => {
         const slug = fileName.replace(/\.md$/, "");
@@ -18,7 +18,8 @@ export function getSortedPosts() {
             content,
         }
     });
-    return allPosts.sort((a, b) => (a.date > b.date ? -1 : 1));
+    const sorted = allPosts.sort((a, b) => (a.date > b.date ? -1 : 1));
+    return sorted.slice(offset, offset + limit);
 }
 
 

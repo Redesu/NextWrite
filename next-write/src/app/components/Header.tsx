@@ -1,9 +1,10 @@
 'use client';
-import { Box, Button, Flex, Heading, Link } from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Spinner } from "@radix-ui/themes";
 import { useEffect } from "react";
+import { ExitIcon, PlusIcon, HomeIcon, InfoCircledIcon, AvatarIcon } from "@radix-ui/react-icons";
 
 export function Header() {
     const { user, logout, loading } = useAuth();
@@ -35,21 +36,40 @@ export function Header() {
                             </Heading>
                         </NextLink>
                     </Link>
-                    <Flex gap="4">
+                    <Flex gap="4" align="center">
                         <Link asChild>
-                            <NextLink href="/">Home</NextLink>
+                            <NextLink href="/">
+                                <Flex align="center" gap="2">
+                                    <HomeIcon width="16" height="16" />
+                                    <Text size="2">Home</Text>
+                                </Flex>
+                            </NextLink>
                         </Link>
                         <Link asChild>
-                            <NextLink href="/about">About</NextLink>
+                            <NextLink href="/about">
+                                <Flex align="center" gap="2">
+                                    <InfoCircledIcon width="16" height="16" />
+                                    <Text size="2">About</Text>
+                                </Flex>
+                            </NextLink>
                         </Link>
 
                         {!user && (
                             <>
                                 <Link asChild>
-                                    <NextLink href="/login">Login</NextLink>
+                                    <NextLink href="/login">
+                                        <Flex align="center" gap="2">
+                                            <AvatarIcon width="16" height="16" />
+                                            <Text size="2" >Login</Text>
+                                        </Flex>
+                                    </NextLink>
                                 </Link>
                                 <Link asChild>
-                                    <NextLink href="/register">Register</NextLink>
+                                    <NextLink href="/register">
+                                        <Button size="2" variant="soft">
+                                            Create Account
+                                        </Button>
+                                    </NextLink>
                                 </Link>
                             </>
                         )}
@@ -57,22 +77,26 @@ export function Header() {
                         {user && (
                             <>
                                 <Link asChild>
-                                    <NextLink href="/create-post">Create Post</NextLink>
+                                    <NextLink href="/create-post">
+                                        <Button size="2" variant="soft">
+                                            <PlusIcon width="16" height="16" />
+                                            <Text as="span" ml="2">Create Post</Text>
+                                        </Button>
+                                    </NextLink>
                                 </Link>
                                 <Button
-                                    style={{ cursor: "pointer" }}
+                                    size="2"
                                     variant="soft"
                                     color="red"
                                     onClick={async () => {
                                         await logout();
                                     }}
                                 >
-                                    Logout
+                                    <ExitIcon width="16" height="16" />
+                                    <Text as="span" ml="2">Logout</Text>
                                 </Button>
                             </>
                         )}
-
-
                     </Flex>
                 </Flex>
             </header>

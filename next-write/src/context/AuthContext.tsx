@@ -85,9 +85,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const refreshToken = async () => {
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh-token`, {}, {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh-token`, {}, {
                 withCredentials: true,
 
+            });
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
+                withCredentials: true
             });
             setUser(res.data);
             return true;

@@ -13,6 +13,9 @@ export default function createPostPage() {
     const { user } = useAuth();
     const router = useRouter();
 
+    const createdBy = user?.username;
+    console.log(createdBy)
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (loading) return; // this is to prevent multiple submissions
@@ -24,6 +27,7 @@ export default function createPostPage() {
         const description = formData.get('description') as string;
         const content = formData.get('content') as string;
         const createdBy = user?.username || user?._id || 'anonymous';
+
 
         try {
             const result = await createPost({ title, description, content, createdBy });

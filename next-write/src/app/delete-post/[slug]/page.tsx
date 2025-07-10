@@ -1,11 +1,12 @@
 "use client";
 import { AlertDialog, Button, Flex, Text } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 import { deletePost } from "./actions";
 
 
-export default function DeletePostPage({ params }: { params: { slug: string } }) {
+export default function DeletePostPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = use(params);
     const [error, setError] = useState('');
     const [open, setOpen] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -15,7 +16,7 @@ export default function DeletePostPage({ params }: { params: { slug: string } })
         setLoading(true);
         setError("");
         try {
-            const result = await deletePost(params.slug);
+            const result = await deletePost(slug);
             if (result.success) {
                 router.push("/");
             } else {
