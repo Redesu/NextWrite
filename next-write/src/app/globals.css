@@ -102,3 +102,31 @@ a {
 .prose a:hover {
   color: var(--accent-12);
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid var(--gray-5);
+}
+
+th {
+  background-color: var(--gray-2);
+  font-weight: 500;
+}
+
+tr:nth-child(even) {
+  background-color: var(--gray-1);
+}
+
+tr:hover {
+  background-color: var(--gray-2);
+}
