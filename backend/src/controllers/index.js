@@ -5,3 +5,5 @@ export * from './auth/logout.js';
 export * from './auth/refreshToken.js';
 export * from './auth/register.js';
 export * from './auth/storeRefreshTokens.js';
+export * from './comments/getComments.js';
+export * from './comments/newComment.js';
