@@ -5,6 +5,7 @@ import 'dotenv/config';
 import { rateLimit } from 'express-rate-limit'
 
 import authRoutes from './src/routes/auth.routes.js';
+import commentsRoutes from './src/routes/comments.routes.js';
 
 
 const app = express();
@@ -12,6 +13,7 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 1000,
 });
+
 app.use(limiter);
 
 app.use(cors({
@@ -23,6 +25,7 @@ app.use(cookieParser());
 
 // routes
 app.use('/api/auth', authRoutes);
+app.use('/api/comments', commentsRoutes);
 
 // health checking
 app.get('/api/ping', (req, res) => {

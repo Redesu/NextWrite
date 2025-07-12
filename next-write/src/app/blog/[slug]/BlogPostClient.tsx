@@ -1,9 +1,26 @@
 'use client';
 import { Box, Card, Flex, Heading, Text, Button } from "@radix-ui/themes";
 import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
+import { useState } from "react";
+import CommentsSection from "@/app/components/CommentsSection";
 
 export default function BlogPostClient({ post }: { post: any }) {
     const { user } = useAuth();
+    const [newComment, setNewComment] = useState('');
+
+    const handleCommentSubmit = async (content: string, parentId: string | null) => {
+        try {
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/${post.slug}`, {
+                content: newComment,
+                parent_id: parentId
+            }, {
+                withCredentials: true
+            });
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+        }
+    }
 
     return (
         <Flex justify="center" align="center" direction="column" minHeight="100vh">
@@ -41,6 +58,11 @@ export default function BlogPostClient({ post }: { post: any }) {
                     </Text>
                 </Card>
             </Box>
+            <CommentsSection
+                postSlug={post.slug}
+                comments={post.comments}
+                onCommentSubmit={handleCommentSubmit}
+            />
         </Flex>
     );
 }
