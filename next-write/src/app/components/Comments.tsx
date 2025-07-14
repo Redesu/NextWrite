@@ -2,6 +2,7 @@
 import { Avatar, Box, Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 
 export type CommentType = {
+    parent_id: any;
     id: string;
     username: string;
     created_at: string;

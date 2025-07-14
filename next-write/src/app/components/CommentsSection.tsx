@@ -1,6 +1,7 @@
 import { Box, Button, Heading, TextArea, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import Comment, { type CommentType } from "./Comments";
+import { countAllComments } from "@/lib/comments/commentsUtils";
 type CommentsSectionProps = {
     postSlug: string;
     comments?: CommentType[];
@@ -28,7 +29,7 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
     return (
         <Box mt="6">
             <Heading as="h3" size="5" mb="4">
-                Comments {isLoading ? "" : `(${comments.length})`}
+                Comments {isLoading ? "" : `(${countAllComments(comments)})`}
             </Heading>
 
             {/* <Button onClick={() => setReplyingTo(null)}>Add Comment</Button> */}
@@ -61,20 +62,25 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
                 </Box>
             )}
 
-
-            {isLoading ? (
-                <Text mt="4">Loading comments...</Text>
-            ) : comments.length > 0 ? (
-                comments.map((comment) => (
-                    <Comment
-                        key={comment.id}
-                        comment={comment}
-                        onReply={(id) => setReplyingTo(id)}
-                    />
-                ))
-            ) : (
-                <Text mt="4">No comments yet. Be the first to comment!</Text>
-            )}
+            <Box
+                style={{
+                    minWidth: '650px',
+                }}
+            >
+                {isLoading ? (
+                    <Text mt="4">Loading comments...</Text>
+                ) : comments.length > 0 ? (
+                    comments.map((comment) => (
+                        <Comment
+                            key={comment.id}
+                            comment={comment}
+                            onReply={(id) => setReplyingTo(id)}
+                        />
+                    ))
+                ) : (
+                    <Text mt="4">No comments yet. Be the first to comment!</Text>
+                )}
+            </Box>
 
         </Box>
     );

@@ -1,51 +1,13 @@
 'use client';
 import { Box, Card, Flex, Heading, Text, Button } from "@radix-ui/themes";
 import { useAuth } from "@/context/AuthContext";
-import axios from "axios";
-import { useEffect, useState } from "react";
 import CommentsSection from "@/app/components/CommentsSection";
+import { useComments } from "@/lib/comments/useComments";
 
 export default function BlogPostClient({ post }: { post: any }) {
+
     const { user } = useAuth();
-    const [isLoadingComments, setIsLoadingComments] = useState(false);
-    const [comments, setComments] = useState(post.comments || []);
-
-    const handleCommentSubmit = async (content: string, parent_id: string | null) => {
-        try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/${post.slug}`, {
-                content,
-                parent_id: parent_id || null
-            }, {
-                withCredentials: true
-            });
-            await loadComments();
-        } catch (error) {
-            console.error("Error submitting comment:", error);
-        }
-    }
-
-    useEffect(() => {
-        loadComments();
-    }, [post.slug]);
-
-
-    const loadComments = async () => {
-        setIsLoadingComments(true);
-        try {
-            console.log("trying to load comments for post:", post.slug);
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/comments/${post.slug}`, {
-                withCredentials: true
-            });
-            console.log("Comments loaded:", response.data);
-            setComments(response.data);
-            return response.data;
-        } catch (error) {
-            console.error("Error loading comments:", error);
-        } finally {
-            setIsLoadingComments(false);
-        }
-    }
-
+    const { comments, isLoading: isLoadingComments, handleSubmitComment } = useComments(post.slug, post.comments || []);
 
     return (
         <Flex justify="center" align="center" direction="column" minHeight="100vh">
@@ -86,7 +48,7 @@ export default function BlogPostClient({ post }: { post: any }) {
             <CommentsSection
                 postSlug={post.slug}
                 comments={comments}
-                onCommentSubmit={handleCommentSubmit}
+                onCommentSubmit={handleSubmitComment}
                 isLoading={isLoadingComments}
             />
         </Flex>
