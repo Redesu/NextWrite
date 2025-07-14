@@ -15,40 +15,75 @@ type CommentProps = {
 };
 
 export default function Comment({ comment, depth = 0, onReply }: CommentProps) {
+    const maxDepth = 8;
+    const effecTiveDepth = Math.min(depth, maxDepth);
+    const indentSize = effecTiveDepth * 20;
     return (
         <Box
             style={{
-                marginLeft: `${depth * 1.5}rem`,
-                borderLeft: depth > 0 ? "2px solid var(--gray-4)" : "none",
-                paddingLeft: depth > 0 ? "1rem" : "0",
+                marginLeft: `${indentSize}px`,
+                marginTop: '1rem',
+                position: 'relative',
+                width: `calc(100% - ${indentSize}px)`,
+                minWidth: '650px',
             }}
         >
-            <Flex gap="3" align="center" mb="2">
+
+            {depth > 0 && (
+                <Box
+                    style={{
+                        position: 'absolute',
+                        left: '-10px',
+                        top: 0,
+                        bottom: 0,
+                        width: '2px',
+                        backgroundColor: 'var(--gray-4)',
+                    }}
+                />
+            )}
+
+            <Flex gap="2" align="start">
                 <Avatar
                     fallback={comment.username[0].toUpperCase()}
-                    size="2"
+                    size={depth > 2 ? "1" : "2"}
                     radius="full"
                 />
-                <Text weight="bold">{comment.username}</Text>
-                <Text size="1" color="gray">
-                    {new Date(comment.created_at).toLocaleDateString()}
-                </Text>
-            </Flex>
-            <Text as="p" size="2" mb="3" style={{ whiteSpace: "pre-wrap" }}>
-                {comment.content}
-            </Text>
-            <Button size="1" variant="ghost" onClick={() => onReply(comment.id)}>
-                Reply
-            </Button>
 
-            {comment.replies?.map((reply) => (
-                <Comment
-                    key={reply.id}
-                    comment={reply}
-                    depth={depth + 1}
-                    onReply={onReply}
-                />
-            ))}
+                <Box style={{ flex: 1 }}>
+                    <Flex gap="2" align="center" mb="1">
+                        <Text weight="bold" size={depth > 2 ? "1" : "2"}>{comment.username}</Text>
+                        <Text size="1" color="gray">
+                            {new Date(comment.created_at).toLocaleDateString()}
+                        </Text>
+                    </Flex>
+
+                    <Text as="p" size={depth > 2 ? "1" : "2"} mb="3" style={{ whiteSpace: "pre-wrap", lineHeight: 1.4 }}>
+                        {comment.content}
+                    </Text>
+                    <Button size="1" variant="ghost" onClick={() => onReply(comment.id)}>
+                        Reply
+                    </Button>
+                </Box>
+            </Flex>
+
+            {comment.replies && comment.replies.length > 0 && (
+                <Box mt="2" style={
+                    {
+                        marginLeft: `${indentSize + 20}px`,
+                        width: `calc(100% - ${indentSize + 20}px)`,
+                        minWidth: '650px',
+                    }
+                }>
+                    {comment.replies.map((reply) => (
+                        <Comment
+                            key={reply.id}
+                            comment={reply}
+                            depth={depth + 1}
+                            onReply={onReply}
+                        />
+                    ))}
+                </Box>
+            )}
         </Box>
     );
 }

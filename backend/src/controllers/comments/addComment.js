@@ -5,18 +5,18 @@ export const addComment = async (req, res) => {
         const { content } = req.body;
         const { parent_id } = req.body;
         const { postSlug } = req.params;
-        const userId = req.user.id; // Assuming user ID is available in req.user
+        const userId = req.user.id;
 
-        if (!content || !slug) {
+        if (!content || !postSlug) {
             return res.status(400).json({ message: 'Content and post slug are required' });
         }
-
         const result = await db.query(
             `INSERT INTO comments (content, post_slug, author_id, parent_id)
              VALUES ($1, $2, $3, $4)
-             RETURNING *, (SELECT username FROM users where id = $2) as username`,
+             RETURNING *, (SELECT username FROM users where id = $3) as username`,
             [content, postSlug, userId, parent_id]
         );
+
 
         res.status(201).json(result.rows[0]);
     } catch (error) {

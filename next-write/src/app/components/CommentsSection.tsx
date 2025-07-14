@@ -1,33 +1,34 @@
 import { Box, Button, Heading, TextArea, Text } from "@radix-ui/themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Comment, { type CommentType } from "./Comments";
 type CommentsSectionProps = {
     postSlug: string;
     comments?: CommentType[];
     onCommentSubmit: (content: string, parentId: string | null) => Promise<void>;
+    isLoading?: boolean;
 };
 
-export default function CommentsSection({ postSlug, comments = [], onCommentSubmit }: CommentsSectionProps) {
+export default function CommentsSection({ postSlug, comments = [], onCommentSubmit, isLoading = false }: CommentsSectionProps) {
     const [newComment, setNewComment] = useState('');
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isisSubmitting, setIsSubmitting] = useState(false);
 
     const handleCommentSubmit = async () => {
-        setIsLoading(true);
-        if (newComment.trim() === '') return;
+        setIsSubmitting(true);
         try {
             await onCommentSubmit(newComment, replyingTo);
             setNewComment('');
             setReplyingTo(null);
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
+
 
     return (
         <Box mt="6">
             <Heading as="h3" size="5" mb="4">
-                Comments ({comments.length})
+                Comments {isLoading ? "" : `(${comments.length})`}
             </Heading>
 
             {/* <Button onClick={() => setReplyingTo(null)}>Add Comment</Button> */}
@@ -43,7 +44,7 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                     />
-                    <Button onClick={handleCommentSubmit} mt="2">
+                    <Button onClick={handleCommentSubmit} mt="2" style={{ marginBottom: '3rem' }} disabled={isisSubmitting || !newComment.trim()}>
                         {replyingTo ? "Post Reply" : "Post Comment"}
                     </Button>
                 </Box>
@@ -61,7 +62,9 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
             )}
 
 
-            {comments.length > 0 ? (
+            {isLoading ? (
+                <Text mt="4">Loading comments...</Text>
+            ) : comments.length > 0 ? (
                 comments.map((comment) => (
                     <Comment
                         key={comment.id}
@@ -70,10 +73,9 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
                     />
                 ))
             ) : (
-                <Text size="2" color="gray">
-                    No comments yet. Be the first to comment!
-                </Text>
+                <Text mt="4">No comments yet. Be the first to comment!</Text>
             )}
+
         </Box>
     );
 }
