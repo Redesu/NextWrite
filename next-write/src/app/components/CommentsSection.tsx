@@ -2,6 +2,7 @@ import { Box, Button, Heading, TextArea, Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import Comment, { type CommentType } from "./Comments";
 import { countAllComments } from "@/lib/comments/commentsUtils";
+import { useAuth } from "@/context/AuthContext";
 type CommentsSectionProps = {
     postSlug: string;
     comments?: CommentType[];
@@ -13,8 +14,10 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
     const [newComment, setNewComment] = useState('');
     const [replyingTo, setReplyingTo] = useState<string | null>(null);
     const [isisSubmitting, setIsSubmitting] = useState(false);
+    const { user } = useAuth();
 
     const handleCommentSubmit = async () => {
+        if (!user) return;
         setIsSubmitting(true);
         try {
             await onCommentSubmit(newComment, replyingTo);
@@ -48,6 +51,11 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
                     <Button onClick={handleCommentSubmit} mt="2" style={{ marginBottom: '3rem' }} disabled={isisSubmitting || !newComment.trim()}>
                         {replyingTo ? "Post Reply" : "Post Comment"}
                     </Button>
+                    {!user && (
+                        <Text size="2" color="red" mt="1">
+                            Please log in to post a reply
+                        </Text>
+                    )}
                 </Box>
             ) : (
                 <Box mt="3">
@@ -55,10 +63,16 @@ export default function CommentsSection({ postSlug, comments = [], onCommentSubm
                         placeholder="Write a comment..."
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
+                        disabled={!user}
                     />
-                    <Button onClick={handleCommentSubmit} mt="2" disabled={isLoading || !newComment.trim()}>
+                    <Button onClick={handleCommentSubmit} mt="2" disabled={!user || isLoading || !newComment.trim()}>
                         {isLoading ? "Posting..." : "Post Comment"}
                     </Button>
+                    {!user && (
+                        <Text size="2" color="red" mt="1" ml="8">
+                            Please log in to post a comment
+                        </Text>
+                    )}
                 </Box>
             )}
 
