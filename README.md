@@ -53,9 +53,12 @@ cd NextWrite
 ```sh
 cd backend
 cp .env.example .env   # Create your .env file
+
 npm install
 npm run dev            # or: npm start
 ```
+> [!WARNING]  
+> Make sure your PostgreSQL instance is running! Check the schematic script in the last step.
 
 **Backend Environment Variables (`backend/.env`):**
 ```
@@ -83,6 +86,73 @@ npm run dev
 **Frontend Environment Variables (`next-write/.env.local`):**
 ```
 NEXT_PUBLIC_API_URL=your_api_url
+```
+
+### 4. Create the Schematic in your PostgreSQL instance 
+The database uses the following schematic
+![Schema ERD](https://i.imgur.com/5FXDUcc.png)
+
+Create the schema using the following script 
+```sql
+BEGIN;
+
+
+CREATE TABLE IF NOT EXISTS public.comments
+(
+    id serial NOT NULL,
+    post_slug character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    author_id integer,
+    content text COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    parent_id integer,
+    CONSTRAINT comments_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.refresh_tokens
+(
+    id serial NOT NULL,
+    user_id integer,
+    token character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    expires_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    CONSTRAINT refresh_tokens_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    id serial NOT NULL,
+    username character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    email character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    password_hash character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone DEFAULT now(),
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT users_email_key UNIQUE (email),
+    CONSTRAINT users_username_key UNIQUE (username)
+);
+
+ALTER TABLE IF EXISTS public.comments
+    ADD CONSTRAINT comments_author_id_fkey FOREIGN KEY (author_id)
+    REFERENCES public.users (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+
+ALTER TABLE IF EXISTS public.comments
+    ADD CONSTRAINT comments_parent_id_fkey FOREIGN KEY (parent_id)
+    REFERENCES public.comments (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+CREATE INDEX IF NOT EXISTS idx_comments_parent_id
+    ON public.comments(parent_id);
+
+
+ALTER TABLE IF EXISTS public.refresh_tokens
+    ADD CONSTRAINT refresh_tokens_user_id_fkey FOREIGN KEY (user_id)
+    REFERENCES public.users (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
+
+END;
 ```
 
 ---
