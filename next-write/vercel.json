@@ -1,0 +1,14 @@
+{
+    "projects": {
+        "next-write": {
+            "root": "next-write",
+            "framework": "nextjs"
+        },
+        "backend": {
+            "root": "backend",
+            "framework": "express",
+            "buildCommand": "npm run build",
+            "installCommand": "cd backend && npm install"
+        }
+    }
+}
