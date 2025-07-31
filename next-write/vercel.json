@@ -1,10 +1,5 @@
 {
     "buildCommand": "cd next-write && npm run build",
     "outputDirectory": "next-write/.next",
-    "installCommand": "cd next-write && npm install",
-    "functions": {
-        "pages/api/**/*.js": {
-            "runtime": "nodejs18.x"
-        }
-    }
+    "installCommand": "cd next-write && npm install"
 }
