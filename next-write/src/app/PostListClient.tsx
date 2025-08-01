@@ -9,19 +9,39 @@ export default function PostListClient() {
     const [posts, setPosts] = useState<any[]>([]);
     const [offset, setOffset] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [initialLoadComplete, setinitialLoadComplete] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [showScrollButton, setshowScrollButton] = useState(false);
     const limit = 10;
 
     const loadMore = async () => {
         setLoading(true);
-        const newPosts = await getPaginatedPosts(offset, limit);
-        setPosts(prev => [...prev, ...newPosts]);
-        setOffset(offset + newPosts.length);
-        setHasMore(newPosts.length === limit);
-        setLoading(false);
-    };
+        try {
+            const newPosts = await getPaginatedPosts(offset, limit);
 
+            if (!newPosts) {
+                setHasMore(false);
+                return;
+            }
+
+            if (newPosts.length === 0) {
+                setHasMore(false);
+
+                if (posts.length === 0) {
+                    setinitialLoadComplete(true);
+                }
+                return;
+            }
+            setPosts(prev => [...prev, ...newPosts]);
+            setOffset(offset + newPosts.length);
+            setHasMore(newPosts.length === limit);
+        } catch (error) {
+            console.error("Error loading more posts:", error);
+        } finally {
+            setLoading(false);
+            setinitialLoadComplete(true);
+        }
+    };
     const scrollToTop = () => {
         setshowScrollButton(false);
         window.scrollTo({
@@ -51,36 +71,42 @@ export default function PostListClient() {
     return (
         <>
             <Flex direction="column" gap="6">
-                {posts.map((post, index) => (
-                    <Link key={`${post.slug}-${post.date}-${index}`} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
-                        <Box
-                            p="4"
-                            mb="2"
-                            style={{
-                                border: "1px solid var(--gray-5)",
-                                borderRadius: "12px",
-                                background: "var(--gray-1)",
-                                transition: "box-shadow 0.2s",
-                                boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
-                                cursor: "pointer",
-                            }}
-                        >
-                            <Flex align="center" gap="4" mb="2">
-                                <Text size="2" color="gray">
-                                    {post.created_by || "Anonymous"} • {new Date(post.created_at).toLocaleDateString()}
+                {posts.length > 0 ? (
+                    posts.map((post, index) => (
+                        <Link key={`${post.slug}-${post.date}-${index}`} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+                            <Box
+                                p="4"
+                                mb="2"
+                                style={{
+                                    border: "1px solid var(--gray-5)",
+                                    borderRadius: "12px",
+                                    background: "var(--gray-1)",
+                                    transition: "box-shadow 0.2s",
+                                    boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <Flex align="center" gap="4" mb="2">
+                                    <Text size="2" color="gray">
+                                        {post.created_by || "Anonymous"} • {new Date(post.created_at).toLocaleDateString()}
+                                    </Text>
+                                </Flex>
+                                <Heading as="h2" size="5" mb="1" color="indigo">
+                                    {post.title}
+                                </Heading>
+                                <Text size="3" color="gray">
+                                    {post.description}
                                 </Text>
-                            </Flex>
-                            <Heading as="h2" size="5" mb="1" color="indigo">
-                                {post.title}
-                            </Heading>
-                            <Text size="3" color="gray">
-                                {post.description}
-                            </Text>
-                        </Box>
-                    </Link>
-                ))}
+                            </Box>
+                        </Link>
+                    ))
+                ) : initialLoadComplete ? (
+                    <Text align="center" color="gray">
+                        No posts found.
+                    </Text>
+                ) : null}
                 {loading && <Spinner />}
-                {!hasMore && <Text align="center" color="gray">No more posts.</Text>}
+                {!hasMore && posts.length > 0 && <Text align="center" color="gray">No more posts.</Text>}
             </Flex>
             {showScrollButton && (
                 <Button

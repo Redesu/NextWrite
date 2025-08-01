@@ -23,11 +23,9 @@ export default function createPostPage() {
         const title = formData.get('title') as string;
         const description = formData.get('description') as string;
         const content = formData.get('content') as string;
-        const createdBy = user?.username || user?._id || 'anonymous';
-
 
         try {
-            const result = await createPost({ title, description, content, createdBy });
+            const result = await createPost({ title, description, content });
             if (result.success) {
                 router.push(`/blog/${result.slug}`);
             } else {
