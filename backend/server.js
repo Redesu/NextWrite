@@ -6,6 +6,7 @@ import { rateLimit } from 'express-rate-limit'
 
 import authRoutes from './src/routes/auth.routes.js';
 import commentsRoutes from './src/routes/comments.routes.js';
+import postsRoutes from './src/routes/posts.routes.js';
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(cookieParser());
 // routes
 app.use('/api/auth', authRoutes);
 app.use('/api/comments', commentsRoutes);
+app.use('/api/posts', postsRoutes);
 
 // health checking
 app.get('/api/ping', (req, res) => {

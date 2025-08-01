@@ -67,7 +67,7 @@ export default function PostListClient() {
                         >
                             <Flex align="center" gap="4" mb="2">
                                 <Text size="2" color="gray">
-                                    {post.createdBy || "Anonymous"} • {new Date(post.date).toLocaleDateString()}
+                                    {post.created_by || "Anonymous"} • {new Date(post.created_at).toLocaleDateString()}
                                 </Text>
                             </Flex>
                             <Heading as="h2" size="5" mb="1" color="indigo">
