@@ -1,6 +1,4 @@
 {
-    "buildCommand": "next build",
-    "installCommand": "npm install",
     "routes": [
         {
             "src": "/posts/(.*)",
@@ -9,10 +7,5 @@
                 "Cache-Control": "public, max-age=31536000, immutable"
             }
         }
-    ],
-    "functions": {
-        "api/**/*.md": {
-            "includeFiles": "posts/**"
-        }
-    }
+    ]
 }
