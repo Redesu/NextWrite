@@ -16,7 +16,7 @@ export async function updatePost({
     content: string;
 }) {
     const date = new Date().toISOString().split('T')[0];
-    const filePath = path.join(process.cwd(), "src/app/posts", `${slug}.md`);
+    const filePath = path.join(process.cwd(), "posts", `${slug}.md`);
     const mdContent = `---
 title: "${title}"
 date: "${date}"
