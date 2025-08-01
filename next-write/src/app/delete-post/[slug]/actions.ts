@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 export async function deletePost(slug: string) {
-    const filePath = path.join(process.cwd(), "src/app/posts", `${slug}.md`);
+    const filePath = path.join(process.cwd(), "posts", `${slug}.md`);
 
     try {
         await fs.unlink(filePath);

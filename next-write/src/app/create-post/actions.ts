@@ -15,7 +15,7 @@ export async function createPost({
 }) {
     const date = new Date().toISOString().split('T')[0];
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const filePath = path.join(process.cwd(), "src/app/posts", `${slug}.md`);
+    const filePath = path.join(process.cwd(), "posts", `${slug}.md`);
     const mdContent = `---
 title: "${title}"
 date: "${date}"

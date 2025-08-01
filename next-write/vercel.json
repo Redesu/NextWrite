@@ -1,0 +1,11 @@
+{
+    "routes": [
+        {
+            "src": "/posts/(.*)",
+            "dest": "/posts/$1",
+            "headers": {
+                "Cache-Control": "public, max-age=31536000, immutable"
+            }
+        }
+    ]
+}
