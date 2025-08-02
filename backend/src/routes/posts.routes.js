@@ -4,10 +4,10 @@ import { protect } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.post('/add-post/:postSlug', protect, addPost);
-router.delete('/delete-post/:postSlug', protect, deletePost);
+router.post('/:postSlug', protect, addPost);
+router.delete('/:postSlug', protect, deletePost);
 router.get('/', getPosts);
 router.get('/:postSlug', getPost);
-router.put('/update-post/:postSlug', protect, updatePost);
+router.put('/:postSlug', protect, updatePost);
 
 export default router;

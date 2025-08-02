@@ -73,7 +73,7 @@ export default function PostListClient() {
             <Flex direction="column" gap="6">
                 {posts.length > 0 ? (
                     posts.map((post, index) => (
-                        <Link key={`${post.slug}-${post.date}-${index}`} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
+                        <Link key={`${post.slug}-${post.created_at}-${index}`} href={`/blog/${post.slug}`} style={{ textDecoration: 'none' }}>
                             <Box
                                 p="4"
                                 mb="2"

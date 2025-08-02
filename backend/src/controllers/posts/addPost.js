@@ -4,7 +4,7 @@ export const addPost = async (req, res) => {
     try {
         const { title, description, content } = req.body;
         const { postSlug } = req.params;
-        const userId = req.user.id;
+        const username = req.user.username;
 
         if (!title || !description || !content) {
             return res.status(400).json({ message: 'Title, description, and content are required' });
@@ -13,8 +13,8 @@ export const addPost = async (req, res) => {
         const result = await db.query(
             `INSERT INTO posts (slug, title, description, content, created_by)
             VALUES ($1, $2, $3, $4, $5)
-            RETURNING *, (SELECT username FROM users where id = $5) as username`,
-            [postSlug, title, description, content, userId]
+            RETURNING *`,
+            [postSlug, title, description, content, username]
 
         );
 

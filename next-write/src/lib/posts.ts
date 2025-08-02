@@ -9,7 +9,6 @@ export async function getSortedPosts(offset = 0, limit = 10) {
         if (!response.data) {
             return [];
         }
-        console.log("response.data", response.data);
         return response.data;
     } catch (error) {
         console.error("Error loading posts:", error);
@@ -25,7 +24,6 @@ export async function getPostBySlug(slug: string) {
             console.error("No post found with slug:", slug);
             return notFound();
         }
-        console.log("post found and using the data: ", response.data)
         return {
             post: response.data
         }

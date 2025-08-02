@@ -6,7 +6,7 @@ export const getPosts = async (req, res) => {
         const limit = req.query.limit || 10;
 
         const result = await db.query(
-            `SELECT * FROM posts ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
+            `SELECT * FROM posts WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1 OFFSET $2`,
             [limit, offset]
         );
 

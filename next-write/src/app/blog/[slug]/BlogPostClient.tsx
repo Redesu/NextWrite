@@ -13,7 +13,7 @@ export default function BlogPostClient({ post }: { post: any }) {
         <Flex justify="center" align="center" direction="column" minHeight="100vh">
             <Box width="100%" maxWidth="700px" p="5">
                 <Card variant="classic" size="4" style={{ overflow: "visible" }}>
-                    {user?.username === post.createdBy && (
+                    {user?.username === post.created_by && (
                         <Flex justify="between" align="center" mb="4">
                             <Button asChild variant="soft" size="2">
                                 <a href={`/edit-post/${post.slug}`}>Edit Post</a>
@@ -27,7 +27,7 @@ export default function BlogPostClient({ post }: { post: any }) {
                         {post.title}
                     </Heading>
                     <Text as="div" size="3" color="gray" mb="6" align="center">
-                        Published on: {post.date}
+                        Published on: {new Date(post.created_at).toLocaleDateString()}
                     </Text>
                     <Box
                         asChild
@@ -41,7 +41,7 @@ export default function BlogPostClient({ post }: { post: any }) {
                         <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
                     </Box>
                     <Text as="p" size="2" color="gray" align="right">
-                        Written by: {post.createdBy || "Anonymous"}
+                        Written by: {post.created_by || "Anonymous"}
                     </Text>
                 </Card>
             </Box>
