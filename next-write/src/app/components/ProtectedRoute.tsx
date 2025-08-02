@@ -10,7 +10,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     const router = useRouter();
 
     if (loading || !user) {
-        return <Spinner />;
+        return <Spinner />
     }
 
     if (!user && !loading) {
