@@ -1,33 +1,33 @@
-"use server"
-import fs from 'fs/promises';
-import path from 'path';
+import axios from "axios";
 
 export async function createPost({
     title,
     description,
-    createdBy,
     content
 }: {
-    title: string;
-    description: string;
-    createdBy: string;
-    content: string;
+    title: string,
+    description: string,
+    content: string
 }) {
-    const date = new Date().toISOString().split('T')[0];
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const filePath = path.join(process.cwd(), "posts", `${slug}.md`);
-    const mdContent = `---
-title: "${title}"
-date: "${date}"
-description: "${description}"
-createdBy: "${createdBy}"
----
-    
-${content}
-    `;
-    await fs.writeFile(filePath, mdContent, 'utf8');
-    return {
-        success: true,
-        slug,
+
+    try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${slug}`, {
+            title,
+            description,
+            content
+        }, {
+            withCredentials: true
+        });
+        return {
+            success: true,
+            slug,
+        }
+    } catch (error) {
+        console.error("Error creating post:", error);
+        return {
+            success: false,
+            message: "Failed to create post. Please try again later."
+        }
     }
 }

@@ -8,13 +8,15 @@ import { useAuth } from "@/context/AuthContext";
 import { updatePost } from "./actions";
 
 export default function EditPostClient({ post }: { post: any }) {
-    const [title, setTitle] = useState(post.title);
+    const [title, setTitle] = useState(post?.title || '');
     const [description, setDescription] = useState(post.description);
     const [content, setContent] = useState(post.content);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { user } = useAuth();
     const router = useRouter();
+
+    console.log("post slug: ", post.post.slug);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -23,7 +25,7 @@ export default function EditPostClient({ post }: { post: any }) {
         setError('');
 
         try {
-            const result = await updatePost({ slug: post.slug, title, description, createdBy: user?.username, content });
+            const result = await updatePost({ slug: post.post.slug, title, description, content });
             if (result.success) {
                 router.push(`/blog/${result.slug}`);
             } else {
@@ -35,6 +37,22 @@ export default function EditPostClient({ post }: { post: any }) {
             setLoading(false);
         }
     };
+
+    if (!post) {
+        return (
+            <ProtectedRoute>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '200px'
+                }}>
+                    Loading...
+                </div>
+            </ProtectedRoute>
+        );
+    }
+
     return (
         <ProtectedRoute>
             <Form.Root className="FormRoot" onSubmit={handleSubmit} style={{

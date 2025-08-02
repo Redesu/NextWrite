@@ -1,33 +1,33 @@
-"use server"
-import fs from 'fs/promises';
-import path from 'path';
+import axios from "axios";
 
 export async function updatePost({
     slug,
     title,
     description,
-    createdBy,
-    content,
+    content
 }: {
-    slug: string;
-    title: string;
-    description: string;
-    createdBy: string;
-    content: string;
+    slug: string,
+    title: string,
+    description: string,
+    content: string
 }) {
-    const date = new Date().toISOString().split('T')[0];
-    const filePath = path.join(process.cwd(), "posts", `${slug}.md`);
-    const mdContent = `---
-title: "${title}"
-date: "${date}"
-description: "${description}"
-createdBy: "${createdBy}"
----    
-${content}
-    `;
-    await fs.writeFile(filePath, mdContent, 'utf8');
-    return {
-        success: true,
-        slug,
-    };
+    try {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${slug}`, {
+            title,
+            description,
+            content
+        }, {
+            withCredentials: true
+        });
+        return {
+            success: true,
+            slug,
+        }
+    } catch (error) {
+        console.error("Error creating post:", error);
+        return {
+            success: false,
+            message: "Failed to update post. Please try again later."
+        }
+    }
 }
