@@ -9,12 +9,12 @@ import commentsRoutes from './src/routes/comments.routes.js';
 import postsRoutes from './src/routes/posts.routes.js';
 
 
+
 const app = express();
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 1000,
 });
-
 app.use(limiter);
 
 app.use(cors({
@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use('/api/auth', authRoutes);
 app.use('/api/comments', commentsRoutes);
 app.use('/api/posts', postsRoutes);
+
 
 // health checking
 app.get('/api/ping', (req, res) => {

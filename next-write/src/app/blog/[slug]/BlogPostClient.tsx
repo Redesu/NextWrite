@@ -1,13 +1,9 @@
 'use client';
 import { Box, Card, Flex, Heading, Text, Button } from "@radix-ui/themes";
 import { useAuth } from "@/context/AuthContext";
-import CommentsSection from "@/app/components/CommentsSection";
-import { useComments } from "@/lib/comments/useComments";
 
 export default function BlogPostClient({ post }: { post: any }) {
-
     const { user } = useAuth();
-    const { comments, isLoading: isLoadingComments, handleSubmitComment } = useComments(post.slug, post.comments || []);
 
     return (
         <Flex justify="center" align="center" direction="column" minHeight="100vh">
@@ -45,12 +41,6 @@ export default function BlogPostClient({ post }: { post: any }) {
                     </Text>
                 </Card>
             </Box>
-            <CommentsSection
-                postSlug={post.slug}
-                comments={comments}
-                onCommentSubmit={handleSubmitComment}
-                isLoading={isLoadingComments}
-            />
         </Flex>
     );
 }

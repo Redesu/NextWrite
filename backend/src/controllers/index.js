@@ -12,3 +12,4 @@ export * from './posts/deletePost.js';
 export * from './posts/getPost.js';
 export * from './posts/getPosts.js';
 export * from './posts/updatePost.js';
+

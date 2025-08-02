@@ -128,7 +128,7 @@ export default function PostListClient() {
                     onClick={scrollToTop}
                 >  <ArrowUpIcon width="24" height="24" />
                 </Button>
-            )}
+            )};
         </>
-    )
+    );
 }
