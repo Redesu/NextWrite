@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 
 export async function getSortedPosts(offset = 0, limit = 10) {
     try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?offset=0&limit=10`, {});
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts?offset=${offset}&limit=${limit}`, {});
         if (!response.data) {
             return [];
         }
