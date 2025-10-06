@@ -16,7 +16,7 @@ export default function About() {
                 This project is built with Next.js, Radix UI, and TypeScript. It features a simple blogging platform that allows users to create, edit, and delete posts.
             </Text>
             <Text as="p" size="4" mb="8">
-                All pages are written in Markdown and live in the <code style={{ fontWeight: 'bold', color: 'red' }}>app/posts</code> directory.
+                All pages are written in Markdown and live in the <code style={{ fontWeight: 'bold', color: 'red' }}>database</code>.
                 The authentication logic is handled by the Express and postgres server in the <code style={{ fontWeight: 'bold', color: 'red' }}>backend</code> directory.
             </Text>
             <Text as="p" size="4" mb="8">
