@@ -1,10 +1,10 @@
-# [Next Write](https://next-write-sable.vercel.app/)
+# [Next Write](https://nextwrite.redesu.com.br/)
 
 ![Main page](https://i.imgur.com/vgNQBcA.png)
 
 A full-stack tech blog built with **Node.js**, **Express**, **PostgreSQL** (backend) and **Next.js**, **Radix UI** (frontend).
 
-## You can find a live version [HERE](https://next-write-sable.vercel.app/)
+## You can find a live version [HERE](https://nextwrite.redesu.com.br/)
 ---
 
 ## Features
