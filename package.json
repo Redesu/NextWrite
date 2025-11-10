@@ -1,8 +1,13 @@
 {
+  "workspaces": [
+    "backend",
+    "next-write"
+  ],
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
     "@types/js-cookie": "^3.0.6",
     "bcryptjs": "^3.0.2",
+    "concurrently": "^9.2.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.0.0",
@@ -10,6 +15,11 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3",
     "ws": "^8.18.3"
+  },
+  "scripts": {
+    "dev": "concurrently --names \"BACKEND,NEXT-WRITE\" \"npm run dev:backend\" \"npm run dev:next-write\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:next-write": "cd next-write && npm run dev"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
