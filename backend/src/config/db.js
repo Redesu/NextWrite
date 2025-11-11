@@ -1,13 +1,13 @@
 // import { Pool } from "pg";
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import ws from 'ws';
-import 'dotenv/config';
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import ws from "ws";
+import "dotenv/config";
 
 neonConfig.webSocketConstructor = ws;
 
 const pool = new Pool({
-    connectionString: process.env.DB_HOST,
-    ssl: true
+  connectionString: process.env.DB_HOST,
+  ssl: true,
 });
 
 // If you are using a local database then use the following
@@ -20,5 +20,5 @@ const pool = new Pool({
 // });
 
 export default {
-    query: (text, params) => pool.query(text, params),
+  query: (text, params) => pool.query(text, params),
 };
