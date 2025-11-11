@@ -1,9 +1,8 @@
 import "@radix-ui/themes/styles.css";
 import { Box, Heading, Text } from "@radix-ui/themes";
-import PostListClient from "./PostListClient"
+import PostListClient from "./PostListClient";
 
 export default async function Home() {
-
   return (
     <Box p="5" mx="auto" maxWidth="700px">
       <Heading as="h1" size="8" mb="6" align="center">
