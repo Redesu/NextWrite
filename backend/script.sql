@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.comments
     author_id integer,
     content text COLLATE pg_catalog."default" NOT NULL,
     created_at timestamp without time zone DEFAULT now(),
+    deleted_at timestamp without time zone default NULL,
     parent_id integer,
     CONSTRAINT comments_pkey PRIMARY KEY (id)
 );
