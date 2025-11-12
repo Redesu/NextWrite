@@ -72,7 +72,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           withCredentials: true,
         }
       );
-      console.log("Logged in user:", res.data);
       setUser(res.data);
       router.push("/");
 

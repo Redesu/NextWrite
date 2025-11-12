@@ -7,7 +7,6 @@ export async function getCommentsByPostSlug(slug: string) {
     );
 
     if (!response.data) {
-      console.log("No comments found for this post.");
       return [];
     }
 
