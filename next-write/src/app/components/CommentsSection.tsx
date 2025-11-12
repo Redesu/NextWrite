@@ -13,6 +13,7 @@ import {
   Heading,
   IconButton,
   Separator,
+  Spinner,
   Text,
   TextArea,
 } from "@radix-ui/themes";
@@ -33,10 +34,18 @@ export default function CommentsSection({
   const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const loadComments = async () => {
-    const latestComments = await getCommentsByPostSlug(postSlug!);
-    setComments(latestComments || []);
+    setLoading(true);
+    try {
+      const latestComments = await getCommentsByPostSlug(postSlug!);
+      setComments(latestComments || []);
+    } catch (error) {
+      console.error("Error loading comments:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmitComment = async (e: FormEvent) => {
@@ -142,6 +151,7 @@ export default function CommentsSection({
 
         <Separator my="5" size="4" />
         <Flex direction="column" gap="5">
+          {loading && <Spinner />}
           {comments.map((comment) => (
             <Flex key={comment.id} gap="3">
               <Avatar fallback={comment.username[0]} size="3" />
