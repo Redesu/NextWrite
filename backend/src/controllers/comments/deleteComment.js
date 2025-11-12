@@ -1,3 +1,5 @@
+import db from "../../config/db.js";
+
 export const deleteComment = async (req, res) => {
   try {
     const { commentId } = req.params;
@@ -15,12 +17,9 @@ export const deleteComment = async (req, res) => {
     );
 
     if (!result.rows.length) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Comment not found or you don't have permission to delete it",
-        });
+      return res.status(404).json({
+        message: "Comment not found or you don't have permission to delete it",
+      });
     }
 
     res.status(200).json({ message: "Comment deleted successfully" });

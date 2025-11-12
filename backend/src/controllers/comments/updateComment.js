@@ -1,3 +1,5 @@
+import db from "../../config/db.js";
+
 export const updateComment = async (req, res) => {
   try {
     const { commentId } = req.params;
@@ -16,12 +18,9 @@ export const updateComment = async (req, res) => {
     );
 
     if (!result.rows.length) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Comment not found or you don't have permission to update it",
-        });
+      return res.status(404).json({
+        message: "Comment not found or you don't have permission to update it",
+      });
     }
 
     res.status(200).json({ message: "Comment updated successfully" });
