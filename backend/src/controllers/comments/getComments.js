@@ -2,16 +2,19 @@ import db from "../../config/db.js";
 
 export const getComments = async (req, res) => {
   try {
-    const { postId } = req.params;
+    const { postSlug } = req.params;
 
-    if (!postId) {
-      return res.status(400).json({ message: "Post ID is required" });
+    if (!postSlug) {
+      return res.status(400).json({ message: "Post slug is required" });
     }
 
-    // Fetch comments for the given post ID
+    // Fetch comments for the given post slug
     const result = await db.query(
-      "SELECT * FROM comments WHERE post_id = $1 ORDER BY created_at DESC",
-      [postId]
+      `SELECT c.id, c.content, 
+      c.created_at, u.username FROM comments c INNER JOIN users u ON 
+      c.author_id = u.id WHERE post_slug = $1 ORDER BY 
+      c.created_at DESC`,
+      [postSlug]
     );
 
     if (result.rows.length === 0) {
