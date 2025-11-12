@@ -3,17 +3,22 @@ import axios from "axios";
 export async function getCommentsByPostSlug(slug: string) {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${slug}/comments`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${slug}`,
+      {
+        validateStatus: (status) => {
+          return (status >= 200 && status < 300) || status === 404;
+        },
+      }
     );
 
-    if (!response.data) {
+    if (response.status === 404 || !response.data) {
       console.log("No comments found for this post.");
       return [];
     }
 
     return response.data;
   } catch (error) {
-    console.error("Error loading comments:", error);
+    console.error("Error loading comments");
     return [];
   }
 }
@@ -24,7 +29,7 @@ export async function postCommentToPostSlug(slug: string, content: string) {
     console.log("Using JSON body format: ", JSON.stringify({ content }));
     console.log("Environment API URL:", process.env.NEXT_PUBLIC_API_URL);
     const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${slug}/comments`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/comments/${slug}`,
       JSON.stringify({ content }),
       {
         headers: {

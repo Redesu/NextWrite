@@ -1,5 +1,6 @@
 import { getCommentsByPostSlug, postCommentToPostSlug } from "@/lib/comments";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -46,10 +47,14 @@ export default function CommentsSection({
   };
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const loadComments = async () => {
       const latestComments = await getCommentsByPostSlug(postSlug!);
       setComments(latestComments || []);
-    }, 30000);
+    };
+
+    loadComments();
+
+    const interval = setInterval(loadComments, 5000);
 
     return () => clearInterval(interval);
   }, [postSlug]);
@@ -97,10 +102,11 @@ export default function CommentsSection({
         <Flex direction="column" gap="5">
           {comments.map((comment) => (
             <Flex key={comment.id} gap="3">
+              <Avatar fallback={comment.username[0]} size="3" />
               <Box flexGrow="1">
                 <Flex justify="between" align="center">
                   <Text as="p" weight="bold" size="3">
-                    {comment.author}
+                    {comment.username}
                   </Text>
                   <Text as="p" color="gray" size="2">
                     {new Date(comment.created_at).toLocaleDateString()}
