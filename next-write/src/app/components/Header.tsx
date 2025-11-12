@@ -3,32 +3,30 @@ import { Box, Button, Flex, Heading, Link, Text } from "@radix-ui/themes";
 import NextLink from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Spinner } from "@radix-ui/themes";
-import { useEffect } from "react";
 import {
   ExitIcon,
   PlusIcon,
   HomeIcon,
   InfoCircledIcon,
   AvatarIcon,
+  PersonIcon,
 } from "@radix-ui/react-icons";
 
 export function Header() {
   const { user, logout, loading } = useAuth();
-
-  useEffect(() => {}, [user]);
 
   if (loading) {
     return (
       <Box
         asChild
         py="4"
-        px="5"
+        px={{ initial: "3", sm: "5" }}
         style={{ borderBottom: "1px solid var(--gray-5)" }}
       >
         <Flex
           justify="between"
           align="center"
-          gap="6"
+          gap={{ initial: "3", sm: "6" }}
           maxWidth="1200px"
           mx="auto"
         >
@@ -45,14 +43,14 @@ export function Header() {
     <Box
       asChild
       py="4"
-      px="5"
+      px={{ initial: "3", sm: "5" }}
       style={{ borderBottom: "1px solid var(--gray-5)" }}
     >
       <header>
         <Flex
           justify="between"
           align="center"
-          gap="6"
+          gap={{ initial: "3", sm: "6" }}
           maxWidth="1200px"
           mx="auto"
         >
@@ -63,20 +61,24 @@ export function Header() {
               </Heading>
             </NextLink>
           </Link>
-          <Flex gap="4" align="center">
+          <Flex gap={{ initial: "3", sm: "4" }} align="center">
             <Link asChild>
               <NextLink href="/">
-                <Flex align="center" gap="2">
+                <Flex align="center" gap={{ initial: "0", sm: "2" }}>
                   <HomeIcon width="16" height="16" />
-                  <Text size="2">Home</Text>
+                  <Box as="span" display={{ initial: "none", sm: "inline" }}>
+                    <Text size="2">Home</Text>
+                  </Box>
                 </Flex>
               </NextLink>
             </Link>
             <Link asChild>
               <NextLink href="/about">
-                <Flex align="center" gap="2">
+                <Flex align="center" gap={{ initial: "0", sm: "2" }}>
                   <InfoCircledIcon width="16" height="16" />
-                  <Text size="2">About</Text>
+                  <Box as="span" display={{ initial: "none", sm: "inline" }}>
+                    <Text size="2">About</Text>
+                  </Box>
                 </Flex>
               </NextLink>
             </Link>
@@ -85,16 +87,28 @@ export function Header() {
               <>
                 <Link asChild>
                   <NextLink href="/login">
-                    <Flex align="center" gap="2">
+                    <Flex align="center" gap={{ initial: "0", sm: "2" }}>
                       <AvatarIcon width="16" height="16" />
-                      <Text size="2">Login</Text>
+                      <Box
+                        as="span"
+                        display={{ initial: "none", sm: "inline" }}
+                      >
+                        <Text size="2">Login</Text>
+                      </Box>
                     </Flex>
                   </NextLink>
                 </Link>
                 <Link asChild>
                   <NextLink href="/register">
                     <Button size="2" variant="soft">
-                      Create Account
+                      <PersonIcon width="16" height="16" />
+                      <Box
+                        as="span"
+                        display={{ initial: "none", sm: "inline" }}
+                        ml="2"
+                      >
+                        Create Account
+                      </Box>
                     </Button>
                   </NextLink>
                 </Link>
@@ -107,9 +121,13 @@ export function Header() {
                   <NextLink href="/create-post">
                     <Button size="2" variant="soft">
                       <PlusIcon width="16" height="16" />
-                      <Text as="span" ml="2">
+                      <Box
+                        as="span"
+                        display={{ initial: "none", sm: "inline" }}
+                        ml="2"
+                      >
                         Create Post
-                      </Text>
+                      </Box>
                     </Button>
                   </NextLink>
                 </Link>
@@ -122,9 +140,13 @@ export function Header() {
                   }}
                 >
                   <ExitIcon width="16" height="16" />
-                  <Text as="span" ml="2">
+                  <Box
+                    as="span"
+                    display={{ initial: "none", sm: "inline" }}
+                    ml="2"
+                  >
                     Logout
-                  </Text>
+                  </Box>
                 </Button>
               </>
             )}
