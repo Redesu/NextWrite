@@ -1,4 +1,9 @@
-import { getCommentsByPostSlug, postCommentToPostSlug } from "@/lib/comments";
+import {
+  getCommentsByPostSlug,
+  addComment,
+  updateComment,
+  deleteComment,
+} from "@/lib/comments";
 import {
   Avatar,
   Box,
@@ -6,6 +11,7 @@ import {
   Card,
   Flex,
   Heading,
+  IconButton,
   Separator,
   Text,
   TextArea,
@@ -25,6 +31,13 @@ export default function CommentsSection({
   const [newComment, setNewComment] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editContent, setEditContent] = useState("");
+
+  const loadComments = async () => {
+    const latestComments = await getCommentsByPostSlug(postSlug!);
+    setComments(latestComments || []);
+  };
 
   const handleSubmitComment = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,11 +45,10 @@ export default function CommentsSection({
     setIsSubmitting(true);
 
     try {
-      await postCommentToPostSlug(postSlug!, newComment);
+      await addComment(postSlug!, newComment);
       setError(null);
 
-      const newComments = await getCommentsByPostSlug(postSlug!);
-      setComments(newComments || []);
+      loadComments();
       setNewComment("");
     } catch (error) {
       console.error("Error submitting comment:", error);
@@ -46,14 +58,44 @@ export default function CommentsSection({
     }
   };
 
+  const handleDelete = async (commentId: string) => {
+    if (!confirm("Delete this comment?")) return;
+
+    try {
+      await deleteComment(commentId);
+      loadComments();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      setError("Failed to delete comment.");
+    }
+  };
+
+  const handleEdit = async (commentId: string) => {
+    if (editContent.trim() === "") return;
+
+    try {
+      await updateComment(commentId, editContent);
+      setEditingId(null);
+      setEditContent("");
+      loadComments();
+    } catch (error) {
+      console.error("Error editing comment:", error);
+      setError("Failed to edit comment.");
+    }
+  };
+
+  const startEdit = (comment: any) => {
+    setEditingId(comment.id);
+    setEditContent(comment.content);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditContent("");
+  };
+
   useEffect(() => {
-    const loadComments = async () => {
-      const latestComments = await getCommentsByPostSlug(postSlug!);
-      setComments(latestComments || []);
-    };
-
     loadComments();
-
     const interval = setInterval(loadComments, 5000);
 
     return () => clearInterval(interval);
@@ -108,13 +150,51 @@ export default function CommentsSection({
                   <Text as="p" weight="bold" size="3">
                     {comment.username}
                   </Text>
-                  <Text as="p" color="gray" size="2">
-                    {new Date(comment.created_at).toLocaleDateString()}
-                  </Text>
+                  <Flex gap="2" align="center">
+                    <Text as="p" color="gray" size="2">
+                      {new Date(comment.created_at).toLocaleDateString()}
+                    </Text>
+                    {user && user.username === comment.username && (
+                      <Flex gap="3">
+                        <Button
+                          size="1"
+                          variant="ghost"
+                          onClick={() => startEdit(comment)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="1"
+                          variant="ghost"
+                          color="red"
+                          onClick={() => handleDelete(comment.id)}
+                        >
+                          Delete
+                        </Button>
+                      </Flex>
+                    )}
+                  </Flex>
                 </Flex>
-                <Text as="p" color="gray" size="3" mt="1">
-                  {comment.content}
-                </Text>
+                {editingId === comment.id ? (
+                  <Flex direction="column" gap="2" mt="2">
+                    <TextArea
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                    />
+                    <Flex gap="2">
+                      <Button size="1" onClick={() => handleEdit(comment.id)}>
+                        Save
+                      </Button>
+                      <Button size="1" variant="soft" onClick={cancelEdit}>
+                        Cancel
+                      </Button>
+                    </Flex>
+                  </Flex>
+                ) : (
+                  <Text as="p" color="gray" size="3" mt="1">
+                    {comment.content}
+                  </Text>
+                )}
               </Box>
             </Flex>
           ))}
