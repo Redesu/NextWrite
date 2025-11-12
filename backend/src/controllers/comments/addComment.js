@@ -1,6 +1,6 @@
 import db from "../../config/db.js";
 
-export const newComment = async (req, res) => {
+export const addComment = async (req, res) => {
   try {
     const { postId } = req.params;
     const { content } = req.body;
