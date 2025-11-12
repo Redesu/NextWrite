@@ -2,10 +2,11 @@ import db from "../../config/db.js";
 
 export const addComment = async (req, res) => {
   try {
-    const { postId } = req.params;
+    const { postSlug } = req.params;
     const { content } = req.body;
+    const userId = req.user.id;
 
-    if (!postId || !content) {
+    if (!postSlug || !content || !userId) {
       return res
         .status(400)
         .json({ message: "Post ID and content are required" });
@@ -13,8 +14,8 @@ export const addComment = async (req, res) => {
 
     // Insert new comment into the database
     const result = await db.query(
-      "INSERT INTO comments (post_id, user_id, content) VALUES ($1, $2, $3) RETURNING *",
-      [postId, req.user.id, content]
+      "INSERT INTO comments (post_slug, author_id, content) VALUES ($1, $2, $3) RETURNING *",
+      [postSlug, userId, content]
     );
 
     res.status(201).json(result.rows[0]);
