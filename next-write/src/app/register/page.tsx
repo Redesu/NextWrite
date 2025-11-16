@@ -34,7 +34,7 @@ export default function RegisterPage() {
     try {
       const { success, message } = await register(formData);
       if (!success) {
-        setError(message);
+        setError("User or email already exists. Please try again.");
       }
     } catch (err) {
       setError(
