@@ -22,7 +22,7 @@ export default function LoginPage() {
       const formData = new FormData(event.currentTarget);
       const { success, message } = await login(formData);
       if (!success) {
-        setError(message);
+        setError("Email or password is incorrect.");
       }
     } catch (err) {
       setError(
