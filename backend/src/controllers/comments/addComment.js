@@ -12,7 +12,15 @@ export const addComment = async (req, res) => {
         .json({ message: "Post ID and content are required" });
     }
 
-    // Insert new comment into the database
+    const post = await db.query(
+      "SELECT * FROM posts WHERE slug = $1 AND deleted_at IS NULL",
+      [postSlug]
+    );
+
+    if (!post.rows.length) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
     const result = await db.query(
       "INSERT INTO comments (post_slug, author_id, content) VALUES ($1, $2, $3) RETURNING *",
       [postSlug, userId, content]
