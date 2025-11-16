@@ -7,9 +7,13 @@ export const getPost = async (req, res) => {
       return res.status(400).json({ message: "Post slug is required" });
     }
 
-    const result = await db.query(`SELECT * FROM posts WHERE slug = $1`, [
-      postSlug,
-    ]);
+    const result = await db.query(
+      `
+      SELECT * FROM posts WHERE slug = $1
+      AND deleted_at IS NULL
+      `,
+      [postSlug]
+    );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Post not found" });
