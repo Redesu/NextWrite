@@ -7,6 +7,11 @@ import "dotenv/config";
 export const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     //checking if the user exist
     const userExists = await db.query(
       "SELECT * FROM users where email = $1 OR username = $2",
