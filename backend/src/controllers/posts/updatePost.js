@@ -6,16 +6,18 @@ export const updatePost = async (req, res) => {
     const { postSlug } = req.params;
     const username = req.user.username;
 
-    if (!title || !description || !content) {
-      return res
-        .status(400)
-        .json({ message: "Title, description, and content are required" });
+    if (!title || !description || !content || !postSlug || !username) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
     const result = await db.query(
       `UPDATE posts SET title = $1, description = $2, content = $3 WHERE slug = $4 AND created_by = $5 RETURNING *`,
       [title, description, content, postSlug, username]
     );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Post not found" });
+    }
 
     res.status(200).json(result.rows[0]);
   } catch (error) {

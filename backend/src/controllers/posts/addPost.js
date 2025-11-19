@@ -6,7 +6,7 @@ export const addPost = async (req, res) => {
     const { postSlug } = req.params;
     const username = req.user.username;
 
-    if (!title || !description || !content) {
+    if (!title || !description || !content || !postSlug || !username) {
       return res
         .status(400)
         .json({ message: "Title, description, and content are required" });
