@@ -7,6 +7,11 @@ import "dotenv/config";
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const user = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
