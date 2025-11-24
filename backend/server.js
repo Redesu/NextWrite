@@ -10,7 +10,7 @@ import postsRoutes from "./src/routes/posts.routes.js";
 
 const app = express();
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 15 * 60 * 1000, // 15 minutes
   max: 1000,
 });
 app.use(limiter);
