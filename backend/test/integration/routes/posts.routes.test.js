@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../../../server.js";
 
 describe("Posts routes", () => {
-  describe("/comments", () => {
+  describe("/posts", () => {
     let accessTokenCookie;
     let createPostResponse;
     beforeEach(async () => {
@@ -15,10 +15,11 @@ describe("Posts routes", () => {
           password: "password",
         });
       const cookies = registerResponse.headers["set-cookie"];
-      const cookieArray = cookies.split("; ");
-      accessTokenCookie = cookieArray.find((cookie) =>
-        cookie.startsWith("accessTokenCookie=")
-      );
+      if (Array.isArray(cookies)) {
+        accessTokenCookie = cookies.find((cookie) =>
+          cookie.startsWith("accessToken=")
+        );
+      }
 
       // create a new post
       createPostResponse = await request(app)
@@ -26,6 +27,7 @@ describe("Posts routes", () => {
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test-Post",
+          description: "Testing description",
           content: "This is a test post",
         });
     });
@@ -36,6 +38,7 @@ describe("Posts routes", () => {
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test",
+          description: "Testing description",
           content: "This is a test post",
         });
       expect(response.status).toBe(201);
@@ -69,7 +72,7 @@ describe("Posts routes", () => {
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test",
-          description: "This is a test post",
+          description: "This is a updated test post",
           content: "This is an updated test post",
         });
       expect(response.status).toBe(200);

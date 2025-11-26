@@ -16,10 +16,11 @@ describe("Comments routes", () => {
           password: "password",
         });
       const cookies = registerResponse.headers["set-cookie"];
-      const cookieArray = cookies.split("; ");
-      accessTokenCookie = cookieArray.find((cookie) =>
-        cookie.startsWith("accessTokenCookie=")
-      );
+      if (Array.isArray(cookies)) {
+        accessTokenCookie = cookies.find((cookie) =>
+          cookie.startsWith("accessToken=")
+        );
+      }
 
       // create a new post
       createPostResponse = await request(app)
@@ -32,7 +33,7 @@ describe("Comments routes", () => {
 
       // create a new comment
       createCommentResponse = await request(app)
-        .post(`/api/posts/${createPostResponse.body.slug}/comments`)
+        .post(`/api/comments/${createPostResponse.body.slug}`)
         .set("Cookie", accessTokenCookie)
         .send({
           content: "This is a test comment",
@@ -41,7 +42,7 @@ describe("Comments routes", () => {
 
     test("should create a new comment and return 201", async () => {
       const response = await request(app)
-        .post(`/api/posts/${createPostResponse.body.slug}/comments`)
+        .post(`/api/comments/${createPostResponse.body.slug}`)
         .set("Cookie", accessTokenCookie)
         .send({
           content: "This is a test comment",
@@ -51,14 +52,14 @@ describe("Comments routes", () => {
 
     test("should return 400 if a field is missing while creating a comment", async () => {
       const response = await request(app)
-        .post(`/api/posts/${createPostResponse.body.slug}/comments`)
+        .post(`/api/comments/${createPostResponse.body.slug}`)
         .set("Cookie", accessTokenCookie);
       expect(response.status).toBe(400);
     });
 
     test("should return 404 if the post does not exist while creating a comment", async () => {
       const response = await request(app)
-        .post(`/api/posts/invalid-slug/comments`)
+        .post(`/api/comments/invalid-slug`)
         .set("Cookie", accessTokenCookie)
         .send({
           content: "This is a test comment",
@@ -111,15 +112,13 @@ describe("Comments routes", () => {
 
     test("should return 200 and an array of comments", async () => {
       const response = await request(app).get(
-        `/api/posts/${createPostResponse.body.slug}/comments`
+        `/api/comments/${createPostResponse.body.slug}`
       );
       expect(response.status).toBe(200);
     });
 
     test("should return 200 with an empty array if there are no comments", async () => {
-      const response = await request(app).get(
-        `/api/posts/unvalid-slug/comments`
-      );
+      const response = await request(app).get(`/api/comments/unvalid-slug`);
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
     });
