@@ -3,6 +3,11 @@ import db from "../../config/db.js";
 export const addComment = async (req, res) => {
   try {
     const { postSlug } = req.params;
+
+    if (!req.body) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const { content } = req.body;
     const userId = req.user.id;
 

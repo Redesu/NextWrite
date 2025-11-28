@@ -2,6 +2,10 @@ import db from "../../config/db.js";
 
 export const addPost = async (req, res) => {
   try {
+    if (!req.body) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const { title, description, content } = req.body;
     const { postSlug } = req.params;
     const username = req.user.username;

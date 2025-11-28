@@ -24,16 +24,17 @@ describe("Comments routes", () => {
 
       // create a new post
       createPostResponse = await request(app)
-        .post("/api/posts")
+        .post("/api/posts/test-post")
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test-Post",
+          description: "Testing description",
           content: "This is a test post",
         });
 
       // create a new comment
       createCommentResponse = await request(app)
-        .post(`/api/comments/${createPostResponse.body.slug}`)
+        .post(`/api/comments/test-post`)
         .set("Cookie", accessTokenCookie)
         .send({
           content: "This is a test comment",
@@ -86,7 +87,7 @@ describe("Comments routes", () => {
 
     test("should return 404 if the comment does not exist while updating a comment", async () => {
       const response = await request(app)
-        .put(`/api/comments/update/invalid-id`)
+        .put(`/api/comments/update/99999`)
         .set("Cookie", accessTokenCookie)
         .send({
           content: "This is an updated test comment",
@@ -104,7 +105,7 @@ describe("Comments routes", () => {
 
     test("should return 404 if the delete target comment does not exist", async () => {
       const response = await request(app)
-        .delete(`/api/comments/delete/invalid-id`)
+        .delete(`/api/comments/delete/99999`)
         .set("Cookie", accessTokenCookie)
         .send();
       expect(response.status).toBe(404);

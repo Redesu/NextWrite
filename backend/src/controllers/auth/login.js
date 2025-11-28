@@ -6,6 +6,10 @@ import "dotenv/config";
 
 export const login = async (req, res) => {
   try {
+    if (!req.body) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const { email, password } = req.body;
 
     if (!email || !password) {

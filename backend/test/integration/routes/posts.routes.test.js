@@ -6,12 +6,13 @@ describe("Posts routes", () => {
     let accessTokenCookie;
     let createPostResponse;
     beforeEach(async () => {
+      const timestamp = Date.now();
       // create a user
       const registerResponse = await request(app)
         .post("/api/auth/register")
         .send({
           username: "test",
-          email: "test@test.com",
+          email: `test@test${timestamp}.com`,
           password: "password",
         });
       const cookies = registerResponse.headers["set-cookie"];
@@ -21,20 +22,22 @@ describe("Posts routes", () => {
         );
       }
 
-      // create a new post
       createPostResponse = await request(app)
-        .post("/api/posts")
+        .post(`/api/posts/test-post-${timestamp}`)
         .set("Cookie", accessTokenCookie)
         .send({
-          title: "Test-Post",
+          title: `Test-Post-${timestamp}`,
           description: "Testing description",
           content: "This is a test post",
         });
+
+      console.log(createPostResponse.body);
+      console.log("slug:", createPostResponse.body.slug);
     });
 
     test("should create a new post and return 201", async () => {
       const response = await request(app)
-        .post("/api/posts")
+        .post("/api/posts/testing-test-post")
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test",
@@ -46,7 +49,7 @@ describe("Posts routes", () => {
 
     test("should return 400 if a field is missing when creating a post", async () => {
       const response = await request(app)
-        .post("/api/posts")
+        .post("/api/posts/test-post2")
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test",
@@ -67,23 +70,28 @@ describe("Posts routes", () => {
     });
 
     test("should update a post and return 200", async () => {
+      debugger;
+      console.log("update slug:", createPostResponse.body.slug);
       const response = await request(app)
         .put(`/api/posts/update/${createPostResponse.body.slug}`)
         .set("Cookie", accessTokenCookie)
         .send({
-          title: "Test",
-          description: "This is a updated test post",
+          title: "Updated Test",
+          description: "This is an updated test post",
           content: "This is an updated test post",
         });
       expect(response.status).toBe(200);
     });
 
     test("should return 400 if a field is missing when updating a post", async () => {
+      debugger;
+      console.log("update slug:", createPostResponse.body.slug);
       const response = await request(app)
         .put(`/api/posts/update/${createPostResponse.body.slug}`)
         .set("Cookie", accessTokenCookie)
         .send({
           title: "Test",
+          description: "Test description",
         });
       expect(response.status).toBe(400);
     });

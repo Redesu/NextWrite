@@ -10,9 +10,6 @@ export const getPosts = async (req, res) => {
       [limit, offset]
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "No posts found" });
-    }
     res.status(200).json(result.rows);
   } catch (error) {
     console.error("Error fetching posts:", error);
