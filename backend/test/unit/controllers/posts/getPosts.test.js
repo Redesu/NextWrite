@@ -22,10 +22,11 @@ describe("getPosts", () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  test("should return 404 if no posts found", async () => {
+  test("should return 200 with a empty array if no posts found", async () => {
     req.query.offset = 0;
     req.query.limit = 0;
     await getPosts(req, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith([]);
   });
 });

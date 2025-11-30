@@ -18,7 +18,7 @@ describe("addComment", () => {
         content: post.content,
       },
       user: {
-        id: 2,
+        id: 1,
       },
     };
     res = {

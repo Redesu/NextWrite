@@ -1,4 +1,5 @@
 import { protect } from "../../../../src/middleware/auth.middleware";
+import { jest } from "@jest/globals";
 
 describe("auth middleware", () => {
   let req, res;

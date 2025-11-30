@@ -5,7 +5,7 @@ describe("login", () => {
   let req, res;
 
   const credentials = {
-    email: `test@test.com`,
+    email: `7VpGm@example.com`,
     password: "password",
   };
 

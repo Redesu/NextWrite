@@ -22,16 +22,6 @@ describe("Comments routes", () => {
         );
       }
 
-      // create a new post
-      createPostResponse = await request(app)
-        .post("/api/posts/test-post")
-        .set("Cookie", accessTokenCookie)
-        .send({
-          title: "Test-Post",
-          description: "Testing description",
-          content: "This is a test post",
-        });
-
       // create a new comment
       createCommentResponse = await request(app)
         .post(`/api/comments/test-post`)
@@ -43,7 +33,7 @@ describe("Comments routes", () => {
 
     test("should create a new comment and return 201", async () => {
       const response = await request(app)
-        .post(`/api/comments/${createPostResponse.body.slug}`)
+        .post(`/api/comments/test-post`)
         .set("Cookie", accessTokenCookie)
         .send({
           content: "This is a test comment",
@@ -53,7 +43,7 @@ describe("Comments routes", () => {
 
     test("should return 400 if a field is missing while creating a comment", async () => {
       const response = await request(app)
-        .post(`/api/comments/${createPostResponse.body.slug}`)
+        .post(`/api/comments/test-post`)
         .set("Cookie", accessTokenCookie);
       expect(response.status).toBe(400);
     });
@@ -112,9 +102,7 @@ describe("Comments routes", () => {
     });
 
     test("should return 200 and an array of comments", async () => {
-      const response = await request(app).get(
-        `/api/comments/${createPostResponse.body.slug}`
-      );
+      const response = await request(app).get(`/api/comments/test-post`);
       expect(response.status).toBe(200);
     });
 

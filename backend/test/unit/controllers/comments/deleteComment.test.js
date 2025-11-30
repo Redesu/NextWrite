@@ -10,7 +10,7 @@ describe("deleteComment", () => {
         commentId: 1,
       },
       user: {
-        id: 2,
+        id: 1,
       },
     };
     res = {

@@ -22,6 +22,7 @@ describe("getComments", () => {
   });
 
   test("should return 200 with a empty array if no comments found", async () => {
+    req.params.postSlug = "non-existent-post";
     await getComments(req, res);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith([]);

@@ -12,7 +12,7 @@ describe("addPost", () => {
         content: "Test Content",
       },
       params: {
-        postSlug: "test-post",
+        postSlug: `test-post${Date.now()}`,
       },
       user: {
         id: 1,
