@@ -125,6 +125,34 @@ See [`backend/routes`](backend/src/routes/) for all available endpoints.
 
 ---
 
+## Testing
+
+The backend is covered by automated tests using **Jest**. The test suite includes both unit tests for controllers and integration tests for routes.
+
+### Test Structure
+
+```text
+└───test
+    ├───integration
+    │   └───routes
+    └───unit
+        └───controllers
+            ├───auth
+            ├───comments
+            ├───middleware
+            └───posts
+```
+
+### Running Tests
+
+To run the full test suite, navigate to the backend directory and run the test command:
+
+```sh
+cd backend
+npm test
+```
+
+---
 
 ## Contributing
 
@@ -134,4 +162,4 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://choosealicense.com/licenses/mit/)
